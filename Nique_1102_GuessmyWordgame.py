@@ -32,20 +32,6 @@ def choose_word(word_list):
 
 
 #SUBMISSION OF THE FIRST ONE!
-
-# Load the list of words into the variable word_list
-# so that it can be accessed from anywhere in the program
-
-def is_word_guessed(secret_word, letters_guessed):
-
-    for secret_word in letters_guessed:
-        if list(secret_word) == list(letters_guessed):
-            return True
-    else:
-        return False
-
-
-
 # Load the list of words into the variable word_list
 # so that it can be accessed from anywhere in the program
 word_list = load_words()
@@ -58,7 +44,13 @@ def is_word_guessed(secret_word, letters_guessed):
       False otherwise
     '''
     # FILL IN YOUR CODE HERE...
-    pass
+    for secret_word in letters_guessed:
+        if list(secret_word) == list(letters_guessed):
+            return True
+    else:
+        return False
+pass
+ 
 
 
 ### Testcases
@@ -76,6 +68,13 @@ def get_guessed_word(secret_word, letters_guessed):
       what letters in secret_word have been guessed so far.
     '''
     # FILL IN YOUR CODE HERE...
+    output_string = ''
+    for letters in secret_word:
+      if letters in letters_guessed:
+        output_string += letters
+      else:
+        output_string += '_'
+      return output_string
     pass
     
     
@@ -86,19 +85,19 @@ def get_guessed_word(secret_word, letters_guessed):
 # print(get_guessed_word('durian', ['a', 'c', 'd', 'h', 'i', 'm', 'n', 'r', 't', 'u']))
 
 def get_available_letters(letters_guessed):
-    '''
-    letters_guessed: list, what letters have been guessed so far
-    returns: string, comprised of letters that represents what letters have not
-      yet been guessed.
-    '''
-    # FILL IN YOUR CODE HERE...   
-    pass
+    # FILL IN YOUR CODE HERE... 
+  available = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p']
+  for letters_guessed in available:
+    return available.remove(letters_guessed)
+pass
 
 
 
 #Testcases 
 # print( get_available_letters(['e', 'i', 'k', 'p', 'r', 's']) )
-  
+
+
+
 def game_loop(secret_word):
     '''
     secret_word: string, the secret word to guess.
@@ -120,9 +119,34 @@ def game_loop(secret_word):
     Follows the other limitations detailed in the problem write-up.
     '''
     # FILL IN YOUR CODE HERE...
+
+    print("Let's start the game")
+    print('Thinking of a word with', len(secret_word) ,'letters')
+    numberofchance = 8
+    letters_guessed = []
+  
+    while is_word_guessed(secret_word, letters_guessed) == False:  
+      letterinput = input('Input a letter:')
+      print('Here are your remaining guesses:', numberofchance)
+      print('Letters available:', get_available_letters(letters_guessed))
+      letterinput = input('Guess a letter:')
+      if letterinput in get_available_letters(letters_guessed):
+        letters_guessed.append(letterinput)
+        if letterinput in secret_word:
+          print('You have guessed correctly:', get_guessed_word(secret_word, letters_guessed))
+        else:
+          print('Wrong, try again', get_guessed_word(secret_word,letters_guessed))
+          print(numberofchance,'chances left')
+        if numberofchance == 0:
+          break
+      #print('Correct guesses so far:', get_guessed_word(secret_word, letters_guessed.append(letterinput)))
+
+    if is_word_guessed(secret_word, letters_guessed) == True:
+      print('Win')
+    else:
+      print('lost, the word was:', secret_word)
+
     pass
-
-
 
 
 def main():
