@@ -44,11 +44,14 @@ def is_word_guessed(secret_word, letters_guessed):
       False otherwise
     '''
     # FILL IN YOUR CODE HERE...
-    for secret_word in letters_guessed:
-        if list(secret_word) == list(letters_guessed):
-            return True
+    count = 0
+    for letter in secret_word:
+      if letter in letters_guessed:
+        count += 1
+    if count == len(secret_word):
+      return True
     else:
-        return False
+      return False
 pass
  
 
@@ -74,7 +77,7 @@ def get_guessed_word(secret_word, letters_guessed):
         output_string += letters
       else:
         output_string += '_'
-      return output_string
+    return output_string
     pass
     
     
@@ -86,9 +89,12 @@ def get_guessed_word(secret_word, letters_guessed):
 
 def get_available_letters(letters_guessed):
     # FILL IN YOUR CODE HERE... 
-  available = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p']
-  for letters_guessed in available:
-    return available.remove(letters_guessed)
+  import string
+  lowercase = string.ascii_lowercase
+  for letters in letters_guessed:
+    if letters in lowercase:
+      lowercase = lowercase.replace(letters, '')
+  return lowercase
 pass
 
 
@@ -124,29 +130,38 @@ def game_loop(secret_word):
     print('Thinking of a word with', len(secret_word) ,'letters')
     numberofchance = 8
     letters_guessed = []
-  
+    
+
     while is_word_guessed(secret_word, letters_guessed) == False:  
       letterinput = input('Input a letter:')
-      print('Here are your remaining guesses:', numberofchance)
-      print('Letters available:', get_available_letters(letters_guessed))
-      letterinput = input('Guess a letter:')
-      if letterinput in get_available_letters(letters_guessed):
-        letters_guessed.append(letterinput)
-        if letterinput in secret_word:
-          print('You have guessed correctly:', get_guessed_word(secret_word, letters_guessed))
-        else:
-          print('Wrong, try again', get_guessed_word(secret_word,letters_guessed))
-          print(numberofchance,'chances left')
-        if numberofchance == 0:
-          break
+      
+      letters_guessed.append(letterinput)
+      
+      if letterinput in secret_word:
+        print('Correct, you have', numberofchance, 'left')
+        print(get_guessed_word(secret_word,letters_guessed))
+        print('Letters available:', get_available_letters(letters_guessed))
+      else:
+        print('Wrong, you have', (numberofchance-1), 'gueses left')
+        print(get_guessed_word(secret_word,letters_guessed))
+        print('Letters available:', get_available_letters(letters_guessed))
+        numberofchance-=1
+        
+      #if letterinput in secret_word:
+        #print('You have guessed correctly:', get_guessed_word(secret_word, letterinput))
+      #else:
+        #print('Wrong, try again', get_guessed_word(secret_word,letterinput))
+        #print(numberofchance-1,'chances left')
+      if numberofchance == 0:
+        break
+      print("")
       #print('Correct guesses so far:', get_guessed_word(secret_word, letters_guessed.append(letterinput)))
-
     if is_word_guessed(secret_word, letters_guessed) == True:
       print('Win')
     else:
       print('lost, the word was:', secret_word)
 
-    pass
+      pass
 
 
 def main():
